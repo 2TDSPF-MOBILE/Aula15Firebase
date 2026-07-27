@@ -1,14 +1,14 @@
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons"
 
-export default function ItemLoja() {
+export default function ItemLoja({nomeProduto}) {
     return (
         <View style={styles.container}>
             <Pressable>
                 <MaterialIcons name="check-circle" color={"black"} size={24} />
             </Pressable>
 
-            <Text style={styles.title}>Mouse Gamer</Text>
+            <Text style={styles.title}>{nomeProduto}</Text>
 
             <Pressable>
                 <MaterialIcons name="delete" color={"black"} size={24} />
