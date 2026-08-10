@@ -2,6 +2,7 @@ import { Link } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
+
 export default function LoginScreen() {
   // Estados para armazenar os valores digitados
 
