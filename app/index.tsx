@@ -1,13 +1,34 @@
 import { Link } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import {auth} from "../services/firebaseConfig"
+import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function LoginScreen() {
-  // Estados para armazenar os valores digitados
+  const router = useRouter()//Hook de navegação
 
+  // Estados para armazenar os valores digitados
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+
+  //useEffect para verificar se há usuário salvo no Async
+  useEffect(()=>{
+    const verificarUsuarioLogado = async()=>{
+      try{
+        const usuarioSalvo = await AsyncStorage.getItem("@user")
+        if(usuarioSalvo){
+          router.replace("/HomeScreen")
+        }
+
+      }catch(error){
+        console.log("Error ao verificar login:",error)
+      }
+    }
+    verificarUsuarioLogado();
+  },[])
 
   // Função para simular o envio do formulário
   const handleLogin= () => {
@@ -15,8 +36,25 @@ export default function LoginScreen() {
       Alert.alert('Atenção', 'Preencha todos os campos!');
       return;
     }
-    Alert.alert('Sucesso ao logar', `Usuário logado com sucesso!`);
-    // Aqui você poderia fazer um fetch/axios para enviar ao backend
+
+    signInWithEmailAndPassword(auth,email,senha)
+      .then(async(userCredential)=>{
+        const user = userCredential.user
+        console.log(user);
+
+        //Salva o usuário no Async
+        await AsyncStorage.setItem("@user",JSON.stringify(user));
+
+        router.replace("/HomeScreen");
+      })
+      .catch((error)=>{
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("Mensagem:",errorMessage);
+        Alert.alert("Error","Credenciais inválidas! Verique e-mail e senha");
+      
+      })
+
   };
 
   return (
