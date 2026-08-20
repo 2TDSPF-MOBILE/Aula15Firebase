@@ -1,7 +1,7 @@
 import { Link } from 'expo-router';
 import React, { useState,useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword,sendPasswordResetEmail } from 'firebase/auth';
 import {auth} from "../services/firebaseConfig"
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -57,6 +57,22 @@ export default function LoginScreen() {
 
   };
 
+  const esqueceuSenha = ()=>{
+    //Validação simples do campo e-mail
+    if(!email){
+      alert("Digite o e-mail para recuperar a senha")
+      return
+    }
+    sendPasswordResetEmail(auth,email)
+      .then(()=>{
+        alert("E-mail de redefinição enviado com sucesso!");
+      })
+      .catch((error)=>{
+        console.log("Erro ao enviar email de redefinação", error.message);
+        alert("Error ao enviar e-mail")
+      })
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Realizar login</Text>
@@ -86,6 +102,10 @@ export default function LoginScreen() {
       {/* Botão */}
       <TouchableOpacity style={styles.botao} onPress={handleLogin}>
         <Text style={styles.textoBotao}>Login</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={esqueceuSenha}>
+        <Text style={styles.esqueceuSenhaText}>Esqueceu a senha</Text>
       </TouchableOpacity>
 
       <Link href="CadastrarScreen" style={{marginTop:20,color:'white',marginLeft:150}}>Cadastre-se</Link>
@@ -129,4 +149,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  esqueceuSenhaText:{
+    color:"#fff",
+    marginTop:12,
+    fontSize:14,
+    marginLeft:120
+  }
 });
