@@ -1,9 +1,10 @@
-import { Text, Button,Alert } from "react-native";
+import { Text, Button,Alert,TextInput,StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {auth} from "../services/firebaseConfig"
 import { deleteUser } from "firebase/auth";
+import ItemLoja from "../components/itemLoja";
 
 export default function HomeScreen() {
     const router = useRouter();
@@ -42,7 +43,7 @@ export default function HomeScreen() {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <Text>Olá, Você está na Tela Inicial</Text>
             <Button
                 title="Sair da Conta"
@@ -53,6 +54,32 @@ export default function HomeScreen() {
                 color="#d72c2c"
                 onPress={excluirConta}
             />
+
+            <ItemLoja />
+            <ItemLoja />
+            <ItemLoja />
+            <ItemLoja />
+            
+            <TextInput 
+                placeholder="Digite o nome do produto"
+                style = {styles.input}
+            />
+
         </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    container:{
+        flex:1
+    },
+    input:{
+        backgroundColor:"lightgrey",
+        padding:10,
+        fontSize:15,
+        width:"90%",
+        alignSelf:"center",
+        borderRadius:10,
+        marginTop:"auto"
+    }
+})
