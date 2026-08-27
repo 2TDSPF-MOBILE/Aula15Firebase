@@ -5,9 +5,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {auth} from "../services/firebaseConfig"
 import { deleteUser } from "firebase/auth";
 import ItemLoja from "../components/itemLoja";
+import { useState} from "react"; 
+import { addDoc,collection,db } from "../services/firebaseConfig";   
 
 export default function HomeScreen() {
-    const router = useRouter();
+    const[title,setTitle]=useState("");
+
+    const router = useRouter(); //Hook de navegação
+
+    const salvarItem = async()=>{
+        try{
+            const docRef = await addDoc(collection(db,"items"),{
+                nomeProduto:title,
+                isChecked:false
+            })
+            console.log("Produto criado com ID:",docRef.id)
+        }catch(e){
+            console.log("Error ao salvar:",e)
+        }
+    }
 
     const realizarLogoff = async () => {
         await AsyncStorage.removeItem("@user")
@@ -60,9 +76,13 @@ export default function HomeScreen() {
             <ItemLoja />
             <ItemLoja />
             
+            
             <TextInput 
                 placeholder="Digite o nome do produto"
                 style = {styles.input}
+                value={title}
+                onChangeText={(value)=>setTitle(value)}
+                onSubmitEditing={salvarItem}
             />
 
         </SafeAreaView>
