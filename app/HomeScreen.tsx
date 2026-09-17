@@ -7,7 +7,7 @@ import { deleteUser, onAuthStateChanged } from "firebase/auth";
 import ItemLoja from "../components/itemLoja";
 import { useState, useEffect } from "react";
 import { salvarProdutoUsuario } from "../services/userDataService";
-import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore"
+import { collection, onSnapshot, doc,deleteDoc, updateDoc } from "firebase/firestore"
 
 //Componentes prontos para criar o modal
 import { Provider as PaperProvider, Portal, Dialog } from "react-native-paper"
@@ -159,10 +159,49 @@ export default function HomeScreen() {
         setNomeEditado("")
     }
 
+
+    //Função para excluir o produto
+    const excluirProduto = (produto:Produto)=>{
+        Alert.alert(
+            "Excluir Produto",
+            `Deseja excluir o produto \"${produto.nomeProduto}`,
+            [
+                {text:"Cancelar",style:"cancel"},
+                {
+                    text:"Excluir" ,
+                    style:"destructive",
+                    onPress:async()=>{
+                        const user = auth.currentUser;
+                        if(!user){
+                            Alert.alert("Error","Nenhum usuário logado.")
+                            return
+                        }
+
+                        try{
+                             //Referência do documento que será deletado
+                            const produtoRef = doc(db,"usuarios",user.uid,"produtos",produto.id) 
+                            
+                            //Remove o documento(produto) do firestore
+                            await deleteDoc(produtoRef)
+
+                            Alert.alert("Sucesso","Produto deletado com sucesso.")                            
+                            
+                            
+                        }catch(e){
+                            console.log("Error ao excluir produto:",e)
+                            Alert.alert("Erro","Não foi possível excluir o produto.")
+                        }
+
+                    }
+
+
+                }
+            ]
+        )
+    }
+
     return (
         <PaperProvider>
-
-
             <KeyboardAvoidingView
                 style={styles.keyboardContainer}
                 //No iOS usamos padding
@@ -194,6 +233,7 @@ export default function HomeScreen() {
                         renderItem={({ item }) => <ItemLoja 
                                     nomeProduto={item.nomeProduto}
                                     onEditPress={()=>editarProduto(item)}
+                                    onDeletePress={()=>excluirProduto(item)}
                                     />}
                         ListEmptyComponent={<Text style={styles.emptyText}>Nenhum produto cadastrado</Text>}
 

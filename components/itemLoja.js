@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons"
 
-export default function ItemLoja({nomeProduto,onEditPress}) {
+export default function ItemLoja({nomeProduto,onEditPress,onDeletePress}) {
     return (
         <View style={styles.container}>
             <Pressable onPress={onEditPress}>
@@ -10,7 +10,7 @@ export default function ItemLoja({nomeProduto,onEditPress}) {
 
             <Text style={styles.title}>{nomeProduto}</Text>
 
-            <Pressable>
+            <Pressable onPress={onDeletePress}>
                 <MaterialIcons name="delete" color={"black"} size={24} />
             </Pressable>
         </View>
