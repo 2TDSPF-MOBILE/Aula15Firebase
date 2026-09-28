@@ -8,9 +8,10 @@ import ItemLoja from "../components/itemLoja";
 import { useState, useEffect } from "react";
 import { salvarProdutoUsuario } from "../services/userDataService";
 import { collection, onSnapshot, doc,deleteDoc, updateDoc } from "firebase/firestore"
-
+import { useTranslation } from "react-i18next";
 //Componentes prontos para criar o modal
 import { Provider as PaperProvider, Portal, Dialog } from "react-native-paper"
+
 
 type Produto = {
     id: string,
@@ -27,6 +28,7 @@ export default function HomeScreen() {
 
     const router = useRouter(); //Hook de navegação
 
+    const{t}=useTranslation();
     useEffect(() => {
         //Observa o estado de autenticação do usuário
         //descobrir quem o usuário
@@ -86,7 +88,7 @@ export default function HomeScreen() {
     const excluirConta = () => {
         Alert.alert(
             "Confirmar Exclusão",
-            "Tem certeza que deseja excluir sua conta?",
+            t("confirmDelete"),
             [
                 { text: "Cancelar" },
                 {

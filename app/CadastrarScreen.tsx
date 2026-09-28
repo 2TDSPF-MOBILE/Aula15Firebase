@@ -4,12 +4,15 @@ import {auth} from "../services/firebaseConfig";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 import { criarPerfilUsuario } from '../services/userDataService';
+import { useTranslation } from 'react-i18next';
 
 export default function CadastroScreen() {
   // Estados para armazenar os valores digitados
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+
+  const{t} = useTranslation();
 
   //Hook de navegação
   const router = useRouter()
