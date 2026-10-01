@@ -6,8 +6,11 @@ import {auth} from "../services/firebaseConfig"
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
+import ThemeToggleButton from '../components/ThemeToggleButton';
+import { useTheme } from '../context/ThemeContext';
 
 export default function LoginScreen() {
+  const{colors}=useTheme();
   const router = useRouter()//Hook de navegação
 
   const{t,i18n}=useTranslation();
@@ -81,8 +84,8 @@ export default function LoginScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>{t("welcome")}</Text>
+    <View style={[styles.container,{backgroundColor:colors.background}]}>
+      <Text style={[styles.titulo,{color:colors.textColor}]}>{t("welcome")}</Text>
 
 
       {/* Campo Email */}
@@ -123,6 +126,8 @@ export default function LoginScreen() {
         <Text style={styles.textoBotao}>{t("login")}</Text>
       </TouchableOpacity>
 
+      <ThemeToggleButton/>
+
       <TouchableOpacity onPress={esqueceuSenha}>
         <Text style={styles.esqueceuSenhaText}>Esqueceu a senha</Text>
       </TouchableOpacity>
@@ -136,7 +141,6 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
     justifyContent: 'center',
     padding: 20,
   },
