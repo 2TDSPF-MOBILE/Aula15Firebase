@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import ThemeToggleButton from '../components/ThemeToggleButton';
 import { useTheme } from '../context/ThemeContext';
+import LocalNotificationDemo from '../components/LocalNotificationDemo';
 
 export default function LoginScreen() {
   const{colors}=useTheme();
@@ -122,6 +123,7 @@ export default function LoginScreen() {
         </TouchableOpacity>
       </View>
       {/* Botão */}
+      <LocalNotificationDemo/>
       <TouchableOpacity style={styles.botao} onPress={handleLogin}>
         <Text style={styles.textoBotao}>{t("login")}</Text>
       </TouchableOpacity>
